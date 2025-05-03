@@ -40,7 +40,6 @@ class NavigationPage {
     get careersLink() { return $('#menu-item-6320 > a > .avia-menu-text'); }
     get joinOurTeamLink() { return $('#menu-item-6161 > a > .avia-menu-text'); }
 
-    // Page verification
     get pageHeading() { return $('h4.av-special-heading-tag'); }
 
     async clickNavAndVerify(linkEl, expectedUrl, expectedText = null) {
