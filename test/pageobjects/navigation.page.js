@@ -1,5 +1,6 @@
 class NavigationPage {
     // Main nav links
+    get banner() { return $('#header_main .avia-standard-logo a'); }
     get homeButton() { return $('li.menu-item-home > a'); }
     get aboutUsButton() { return $('#menu-item-3314'); }
     get projectsButton() { return $('#menu-item-3704'); }

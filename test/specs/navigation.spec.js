@@ -5,6 +5,10 @@ describe('IMS Masonry Navigation Tests (No Expect)', () => {
         await browser.url('https://imsmasonry.com/');
     });
 
+    it('click Banner and verify navigation', async () => {
+        await navPage.clickNavAndVerify(navPage.banner, 'imsmasonry.com');
+    });
+
     it('click Home button and verify navigation', async () => {
         await navPage.clickNavAndVerify(navPage.homeButton, 'imsmasonry.com');
     });
