@@ -42,6 +42,7 @@ class NavigationPage {
 
     get pageHeading() { return $('h4.av-special-heading-tag'); }
 
+    // Helper methods for navigation
     async clickNavAndVerify(linkEl, expectedUrl, expectedText = null) {
         await linkEl.waitForClickable({ timeout: 5000 });
         await linkEl.click();
@@ -63,17 +64,10 @@ class NavigationPage {
         await linkEl.click();
     }
 
-    /**
-    * Hovers over a nav menu item and clicks a submenu link, then verifies.
-    * @param {WebdriverIO.Element} menuElement - The top-level menu to hover.
-    * @param {WebdriverIO.Element} linkElement - The submenu link to click.
-    * @param {string} expectedUrlPart - Partial URL to verify after click.
-    * @param {string} expectedText - Optional heading text to verify on the destination page.
-    */
-   async hoverAndClickNav(menuElement, linkElement, expectedUrlPart, expectedText = null) {
-       await menuElement.moveTo();
-       await this.clickNavAndVerify(linkElement, expectedUrlPart, expectedText);
-   }
+    async hoverAndClickNav(menuElement, linkElement, expectedUrlPart, expectedText = null) {
+        await menuElement.moveTo();
+        await this.clickNavAndVerify(linkElement, expectedUrlPart, expectedText);
+    }
 }
 
 module.exports = new NavigationPage();

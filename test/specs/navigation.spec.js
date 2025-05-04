@@ -39,7 +39,6 @@ describe('IMS Masonry Navigation Tests (No Expect)', () => {
 
     it('click Instagram link', async () => {
         await navPage.clickExternalLink(navPage.instagramLink);
-        
     });
 
     it('click Facebook link', async () => {
@@ -69,7 +68,7 @@ describe('IMS Masonry Navigation Tests (No Expect)', () => {
         );
     });
 
-    //Projects Hover Menu
+    // Projects Hover Menu
     it('should hover over Projects Menu Header and click Projects link, verifying destination', async () => {
         await navPage.hoverAndClickNav(
             navPage.projectsMenu,
@@ -124,7 +123,7 @@ describe('IMS Masonry Navigation Tests (No Expect)', () => {
         );
     });
 
-    //Services Hover Menu
+    // Services Hover Menu
     it('should hover over Services Menu Header and click Services link, verifying destination', async () => {
         await navPage.hoverAndClickNav(
             navPage.servicesMenu,
@@ -188,7 +187,7 @@ describe('IMS Masonry Navigation Tests (No Expect)', () => {
         );
     });
 
-    //Careers Hover Menu
+    // Careers Hover Menu
     it('should hover over Careers Menu Header and click Careers link, verifying destination', async () => {
         await navPage.hoverAndClickNav(
             navPage.careersMenu,
@@ -206,5 +205,4 @@ describe('IMS Masonry Navigation Tests (No Expect)', () => {
             'Available Positions'
         );
     });
-    
 });
