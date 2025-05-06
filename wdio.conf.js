@@ -1,5 +1,6 @@
 exports.config = {
     //
+    baseUrl: 'https://imsmasonry.com',
     // ====================
     // Runner Configuration
     // ====================
