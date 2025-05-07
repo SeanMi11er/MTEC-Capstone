@@ -30,7 +30,6 @@ class NavigationPage extends BasePage {
 
         const fxEls = await link.$$('span.avia-menu-fx')
         if (fxEls.length === 0) {
-            // this nav element (e.g. the logo) has no underline – nothing to test
             return
         }
         const fx = fxEls[0]
