@@ -1,39 +1,42 @@
 const BasePage = require('./base.js');
 
 class GalleryPage extends BasePage {
-    constructor() { super('/gallery'); }
+    constructor() { super('/?page_id=914'); }
 
-    get projectImages() { return $$('img.project-image'); }
-    get projectLinks() { return $$('a.project-link'); }
-    get hoverTargets() { return $$('div.hover-effect'); }
-    get galleryImages() { return $$('div.gallery img'); }
-    get galleryLinks() { return $$('div.gallery a'); }
+    get tiles() { return $$('div.avia-image-container-inner'); }
+    get galleryTiles() { return $$('a.grid-image.avia-hover-fx'); }
+
+    link(tile) { return tile.$('a.avia_image'); }
+    img(tile) { return tile.$('img'); }
+    overlay(tile) { return tile.$('span.image-overlay-inside'); }
 
     async expectImagesVisible() {
-        for (const img of await this.projectImages) await expect(img).toBeDisplayed();
-    }
-    async expectLinksVisible() {
-        for (const lnk of await this.projectLinks) await expect(lnk).toBeDisplayed();
-    }
-    async expectHoverEffects() {
-        for (const el of await this.hoverTargets) {
-            await el.moveTo();
-            await expect(el).toBeDisplayed();
+        for (const tile of await this.tiles) {
+            await expect(this.img(tile)).toBeDisplayed();
         }
     }
+
+    async expectLinksVisible() {
+        for (const tile of await this.tiles) {
+            await expect(this.link(tile)).toBeDisplayed();
+        }
+    }
+
     async expectNavigationWorks() {
-        const checks = [...await this.galleryImages, ...await this.galleryLinks];
-        for (const el of checks) {
-            await el.click();
-            await expect(browser).toHaveUrlContaining('gallery');
+        for (const tile of await this.tiles) {
+            const dest = await this.link(tile).getAttribute('href');
+
+            await this.link(tile).click();
+            await expect(browser).toHaveUrl(dest);
+
             await browser.back();
+            await browser.pause(300);
         }
     }
 
     async verifyGalleryPage() {
         await this.expectImagesVisible();
         await this.expectLinksVisible();
-        await this.expectHoverEffects();
         await this.expectNavigationWorks();
     }
 }

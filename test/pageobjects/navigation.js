@@ -24,13 +24,46 @@ class NavigationPage extends BasePage {
         if (heading) await expect(this.headingH4).toHaveText(heading);
     }
 
+    async expectHoverActive(route) {
+        const label = route.label ?? route;
+        const link  = route.el   ?? this.navItem(label);
+
+        const fxEls = await link.$$('span.avia-menu-fx')
+        if (fxEls.length === 0) {
+            // this nav element (e.g. the logo) has no underline – nothing to test
+            return
+        }
+        const fx = fxEls[0]
+
+        await link.moveTo();
+
+        await browser.waitUntil(async () => {
+            const { value: width } = await fx.getCSSProperty('width');
+            return parseFloat(width) > 0;
+        }, {
+            timeout: 1500,
+            timeoutMsg: `Underline did not animate for menu "${label}"`,
+        });
+
+        const { value: width } = await fx.getCSSProperty('width');
+        const { width: linkWidth } = await link.getSize();
+        const diff = Math.abs(parseFloat(width) - linkWidth);
+        if (diff > 2) {
+            throw new Error(
+                `Underline width (${width}px) did not match link width ` +
+                `(${linkWidth}px) for menu “${label}”`
+            );
+        }
+    }
+
     async verifyTopMenu(routes) { for (const r of routes) await this.clickAndVerify(r); }
     async verifySubmenus(routes) { for (const r of routes) await this.hoverClickAndVerify(r); }
     async verifySocial(nets) { for (const n of nets) await this.socialLink(n).click(); }
+    async verifyHovers(routes) { for (const r of routes) await this.expectHoverActive(r); }
 
     get topRoutes() {
         return [
-            { el: this.banner, url: 'imsmasonry.com/' },
+            { label: 'Banner', el: this.banner, url: 'imsmasonry.com/' },
             { label: 'Home', url: 'imsmasonry.com/' },
             { label: 'About Us', url: 'page_id=626', heading: 'About Us' },
             { label: 'Projects', url: 'page_id=914', heading: 'Projects' },
