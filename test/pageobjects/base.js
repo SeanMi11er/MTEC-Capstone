@@ -3,10 +3,7 @@ class BasePage {
     async navigate ()      { await browser.url(this.path); }
     async expectUrl (frag) { await expect(browser).toHaveUrlContaining(frag); }
 
-    /**
-     * Assert the current URL contains the given fragment.
-     * Automatically retries for up to 5 s – just like WDIO’s matcher.
-     */
+
     async expectUrlContains (fragment, timeout = 5000) {
         await browser.waitUntil(
             async () => (await browser.getUrl()).includes(fragment),
