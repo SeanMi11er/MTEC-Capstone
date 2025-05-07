@@ -11,23 +11,25 @@ describe('Contact form', () => {
     });
 
     it('shows an error when Name is empty', async () => {
-        await ContactPage.fillForm({
-            category: 'Estimates',
-            email: 'johndoe@example.com',
-            message: 'Hello'
-        });
-        await ContactPage.submit();
-        await ContactPage.expectError('your-name');
+        await ContactPage.submitFormExpectError(
+            {
+                category : 'Estimates',
+                email    : 'johndoe@example.com',
+                message  : 'Hello'
+            },
+            'your-name'
+        );
     });
 
     it('shows an error when Email is empty', async () => {
-        await ContactPage.fillForm({
-            category: 'Estimates',
-            name: 'John Doe',
-            message: 'Requesting a quote.'
-        });
-        await ContactPage.submit();
-        await ContactPage.expectError('your-email');
+        await ContactPage.submitFormExpectError(
+            {
+                category : 'Estimates',
+                name: 'John Doe',
+                message  : 'Hello'
+            },
+            'your-email'
+        );
     });
 
     it('submits successfully with valid data', async () => {

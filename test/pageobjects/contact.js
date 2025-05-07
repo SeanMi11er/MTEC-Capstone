@@ -12,6 +12,7 @@ class ContactPage extends BasePage {
     get successMessage() { return $('.wpcf7-response-output'); }
 
     field(nameAttr) { return $(`[name="${nameAttr}"]`); }
+    errorFor(field) { return $(`span[data-name="${field}"] .wpcf7-not-valid-tip`); }
 
     categoryOption(label) {
         return $(`//select[@name="contact-category"]/option[normalize-space()="${label}"]`);
@@ -26,21 +27,19 @@ class ContactPage extends BasePage {
         await expect(this.categoryOption(label)).toBeSelected();
     }
 
-    async fillForm({ category, name, email, message }) {
-        if (category) await this.chooseCategory(category);
-        if (name) await this.nameField.setValue(name);
-        if (email) await this.emailField.setValue(email);
-        if (message) await this.messageField.setValue(message);
+    async fillForm(data) {
+        if (data.category) await this.categorySelect.selectByVisibleText(data.category);
+        if (data.name) await this.nameField.setValue(data.name);
+        if (data.email) await this.emailField.setValue(data.email);
+        if (data.message) await this.messageField.setValue(data.message);
     }
 
     async submit() {
         await this.submitButton.click();
     }
 
-    async expectError(nameAttr, txt = 'Please fill out this field.') {
-        const err = await this.errorTip(nameAttr);
-        await expect(err).toBeDisplayed();
-        await expect(err).toHaveText(txt);
+    async expectError(field) {
+        await expect(this.errorFor(field)).toBeDisplayed();
     }
 
     async expectSuccess() {
@@ -50,7 +49,13 @@ class ContactPage extends BasePage {
         );
     }
 
-    fakeContact () {
+    async submitFormExpectError(data, errorField) {
+        await this.fillForm(data);
+        await this.submit();
+        await this.expectError(errorField);
+    }
+
+    fakeContact() {
         return {
             name: faker.person.fullName(),
             email: faker.internet.email(),
