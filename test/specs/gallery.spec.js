@@ -1,20 +1,11 @@
-const GalleryPage = require('../pageobjects/gallery.page');
+const GalleryPage = require('../pageobjects/gallery.js');
 
-describe('IMS Masonry Projects Gallery (No expect in spec)', () => {
+describe('Projects gallery', () => {
     before(async () => {
-        await GalleryPage.open();
+        await GalleryPage.navigate();
     });
 
-    it('should display all project images and text links', async () => {
-        await GalleryPage.validateProjectImagesDisplayed();
-        await GalleryPage.validateProjectLinksDisplayed();
-    });
-
-    it('should show hover effects for images and links', async () => {
-        await GalleryPage.validateHoverEffects();
-    });
-
-    it('should navigate correctly when clicking images and links', async () => {
-        await GalleryPage.validateGalleryNavigation();
+    it('passes all gallery checks', async () => {
+        await GalleryPage.verifyGalleryPage();
     });
 });
