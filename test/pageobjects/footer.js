@@ -1,7 +1,10 @@
 const BasePage = require('./base.js');
 
 class FooterPage extends BasePage {
-    constructor() { super('/'); }
+    constructor() { 
+        super('/');
+        scrollToBottom();
+    }
 
     get corporateSection() { return $('section#text-2'); }
     get mainOfficeSection() { return $('section#text-3'); }
@@ -10,6 +13,10 @@ class FooterPage extends BasePage {
 
     get infoEmail() { return $('a[href="mailto:info@imsmasonry.com"]'); }
     get estimatesEmail() { return $('a[href="mailto:estimates@imsmasonry.com"]'); }
+
+    async scrollToBottom() {
+        await browser.execute(() => window.scrollTo(0, document.body.scrollHeight));
+    }
 
     async expectSectionsVisible() {
         for (const sec of [
