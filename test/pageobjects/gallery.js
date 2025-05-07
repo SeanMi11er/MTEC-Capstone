@@ -10,6 +10,10 @@ class GalleryPage extends BasePage {
     img(tile) { return tile.$('img'); }
     overlay(tile) { return tile.$('span.image-overlay-inside'); }
 
+    captionForHref(href) {
+        return $(`a.av-heading-link[href="${href}"]`);
+    }
+
     async expectImagesVisible() {
         for (const tile of await this.tiles) {
             await expect(this.img(tile)).toBeDisplayed();
@@ -22,18 +26,32 @@ class GalleryPage extends BasePage {
         }
     }
 
-    async expectNavigationWorks() {
-        for (const tile of await this.tiles) {
-            const dest = await this.link(tile).getAttribute('href');
+    async expectNavigationWorks(max = 6) {
+        const cards = await this.tiles;
+
+        for (let i = 0; i < Math.min(max, cards.length); i++) {
+            const tile = cards[i];
+            const imgRef = await this.link(tile).getAttribute('href');
 
             await this.link(tile).click();
-            await expect(browser).toHaveUrl(dest);
+            await expect(browser).toHaveUrl(imgRef);
 
             await browser.back();
-            await browser.pause(300);
+            await (await $('h4.av-special-heading-tag')).waitForDisplayed();
+
+            const caption = this.captionForHref(imgRef);
+
+            await tile.moveTo();
+            await browser.waitUntil(() => caption.isDisplayed(),
+                { timeoutMsg: 'caption never appeared' });
+
+            await caption.click();
+            await expect(browser).toHaveUrl(imgRef);
+
+            await browser.back();
+            await (await $('h4.av-special-heading-tag')).waitForDisplayed();
         }
     }
-
     async verifyGalleryPage() {
         await this.expectImagesVisible();
         await this.expectLinksVisible();
