@@ -1,9 +1,9 @@
 const BasePage = require('./base.js');
 
 class FooterPage extends BasePage {
-    constructor() { 
+    constructor() {
         super('/');
-        scrollToBottom();
+        // Removed scrollToBottom() from here
     }
 
     get corporateSection() { return $('section#text-2'); }
@@ -41,19 +41,16 @@ class FooterPage extends BasePage {
     }
 
     async verifyFooter() {
+        await this.scrollToBottom();
         await this.expectSectionsVisible();
 
         await this.clickEmail(this.infoEmail, 'info');
         await browser.refresh();
 
+        await this.scrollToBottom();
         await this.expectSectionsVisible();
         await this.clickEmail(this.estimatesEmail, 'estimates');
-    }
-
-    async scrollIntoView() {
-        await browser.execute(() => window.scrollTo(0, document.body.scrollHeight));
     }
 }
 
 module.exports = new FooterPage();
-
